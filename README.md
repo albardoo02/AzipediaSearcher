@@ -1,6 +1,8 @@
 # AzipediaSearcher
 ## 概要
-MediaWiki内のページをマインクラフト内から検索する
+MediaWiki内のページをマインクラフト内から検索するプラグイン
+
+デフォルトではAzipediaが指定されていますが、MediaWikiであれば設定で変更可能です
 
 ## 導入
 1：Releasesから最新のjarファイルをダウンロード
