@@ -1,0 +1,62 @@
+# AzipediaSearcher v1.0.0 Configuration
+# すべての項目でカラーコードが使用可能です
+
+# コンソールからコマンドを実行したときに表示するメッセージ
+OnlyPlayers: "&cこのコマンドはプレイヤーのみ使用できます"
+# コマンド実行時に権限不足の場合に表示するメッセージ
+NoPermission: "&cあなたには権限がありません"
+# /wiki reloadを使用したときに表示するメッセージ
+# リロードが完了したことを表示します
+ReloadConfig: "&aConfigを再読み込みしました"
+# Wiki内を検索中であることを表示します
+Searching: "検索しています..."
+# 検索結果が見つからなかったときに表示するメッセージ
+SearchNotFound: "検索結果がありませんでした"
+# クールダウン中であるときに表示するメッセージが
+# %timeで残りの秒数を表示できます
+CooldownMessage: "&cクールダウン中です。あと&%time秒お待ち下さい"
+# 検索結果が見つかったときに表示するメッセージ
+# %searchで検索した単語、%totalResultsで検索結果件数を表示できます
+SearchResult: "&a%searchについての検索結果: &d%totalResults&a件見つかりました"
+# ページ番号を表す数字の隣に表示するメッセージ
+Page: "ページ"
+# これ以上表示するページがないときに表示するメッセージ
+# /wiki next使用時に表示されます
+PageEnd: "これ以上のページはありません"
+# ▶にカーソルを合わせたときに表示するメッセージ
+NextPage: "次のページ"
+# ◀にカーソルを合わせたときに表示するメッセージ
+PrevPage: "前のページ"
+# 検索結果のページタイトルにカーソルを合わせたときに表示するメッセージ
+OpenUrl: "ページを開く"
+# /wiki searchを使用せず、/wiki nextなどを使用したときに表示するメッセージ
+# 複数行設定可能です
+NoSearch:
+  - '&c検索結果がありません'
+  - '&c/wiki search <キーワード> で検索してください'
+# /wikiコマンド使用時、登録されていないコマンドが実行されたときに表示するメッセージ
+# 複数行指定可能です
+UnknownCommand:
+  - '&c%commandというコマンドは見つかりませんでした'
+  - '&c/wiki help で使用可能なコマンドが表示されます'
+# /wiki searchと打ったとき、使い方を表示するメッセージ
+# 複数行指定可能です
+SearchUsage:
+  - '&e使用方法: &f/wiki search <検索ワード> <検索オプション>'
+  - '検索ワードは複数指定できます'
+  - '&e検索オプション:'
+  - ' &flimit=title &f- タイトルのみを検索して検索結果を表示します'
+  - ' &ftype=or &f- 複数文字の検索でどちらかが当てはまる場合の検索結果を表示します'
+  - ' &ftype=andとlimit=textはデフォルトで有効です'
+# /wiki helpと打ったときに表示するメッセージ
+# 複数行指定可能です
+Help:
+  - '&6=== AzipediaSearcher Plugin Help ==='
+  - '&e/wiki &f- Wikiのリンクを表示します'
+  - '&e/wiki reload &f- Configを再読み込みします'
+  - '&e/wiki search <キーワード> &f- キーワードを検索します'
+  - '&e/wiki version &f- バージョンを表示します'
+# /wikiで表示されるWikiのURLを設定してください
+WikiUrl:
+  - '&b公式Wikiはこちら！'
+  - '&f&n&lhttps://wiki.azisaba.net/'

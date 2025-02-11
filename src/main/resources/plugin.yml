@@ -1,0 +1,19 @@
+name: AzipediaSearcher
+version: '${project.version}'
+main: net.azisaba.albardoo02.AzipediaSearcher
+api-version: '1.15'
+
+commands:
+  wiki:
+    description: "Wiki検索コマンド"
+    aliases:
+    - azipedia
+    - azisabawiki
+    - officialwiki
+    - w
+    permission: "azipediasearcher.command.wiki"
+    tab-completer: WikiCommandTabComplete
+
+permissions:
+  azipediasearcher.command.wiki:
+    default: op

@@ -1,0 +1,62 @@
+# AzipediaSearcher v1.0.0 Configuration
+# Color codes can be used for all items
+
+# Message displayed when a command is executed from the console
+OnlyPlayers: "&cThis command can only be used by players"
+# Message displayed when there is insufficient permission to execute the command
+NoPermission: "&cYou do not have permission"
+# Message displayed when using /wiki reload
+# Displays that the reload is complete
+ReloadConfig: "&aConfig reloaded"
+# Displays that the wiki is being searched
+Searching: "Searching..."
+# Message displayed when no search results are found
+SearchNotFound: "No search results found"
+# Message displayed when cooling down
+# %time displays the remaining seconds
+CooldownMessage: "&cYou are on cooldown. Please wait &%time seconds"
+# Message displayed when search results are found
+# %search displays the searched word, %totalResults displays the number of search results
+SearchResult: "&aSearch results for %search: &d%totalResults &afound"
+# Message displayed next to the number representing the page number
+Page: "Page"
+# Message displayed when there are no more pages to display
+# Displayed when using /wiki next
+PageEnd: "There are no more pages"
+# Message displayed when hovering over ▶
+NextPage: "Next Page"
+# Message displayed when hovering over ◀
+PrevPage: "Previous Page"
+# Message displayed when hovering over the page title of a search result
+OpenUrl: "Open Page"
+# Message displayed when using /wiki next etc. without using /wiki search
+# Multiple lines can be set
+NoSearch:
+  - '&cNo search results'
+  - '&cPlease search with /wiki search <keyword>'
+# Message displayed when an unregistered command is executed when using the /wiki command
+# Multiple lines can be specified
+UnknownCommand:
+  - '&cThe command %command was not found'
+  - '&c/wiki help will show you the available commands'
+# Message displayed when typing /wiki search, displays how to use it
+# Multiple lines can be specified
+SearchUsage:
+  - '&eUsage: &f/wiki search <search term> <search options>'
+  - 'Multiple search terms can be specified'
+  - '&eSearch Options:'
+  - ' &flimit=title &f- Searches only for titles and displays the search results'
+  - ' &ftype=or &f- Displays search results when either of multiple characters match'
+  - ' &ftype=and and limit=text are enabled by default'
+# Message displayed when typing /wiki help
+# Multiple lines can be specified
+Help:
+  - '&6=== AzipediaSearcher Plugin Help ==='
+  - '&e/wiki &f- Displays the Wiki link'
+  - '&e/wiki reload &f- Reloads the Config'
+  - '&e/wiki search <keyword> &f- Searches for keywords'
+  - '&e/wiki version &f- Displays the version'
+# Set the URL of the Wiki displayed by /wiki
+WikiUrl:
+  - '&bClick here for the official Wiki!'
+  - '&f&n&lhttps://wiki.azisaba.net/'
