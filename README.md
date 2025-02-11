@@ -1,4 +1,7 @@
 # AzipediaSearcher
+
+![スクリーンショット 2025-02-11 155417](https://github.com/user-attachments/assets/9aab2ec7-1384-48a3-bd3e-5dea35af9bf9)
+
 ## 概要
 MediaWiki内のページをマインクラフト内から検索するプラグイン
 
@@ -11,7 +14,7 @@ MediaWiki内のページをマインクラフト内から検索するプラグ�
 
 3：Plugmanを利用してロードするか、サーバーを再起動する。
 
-4：CentralCoreフォルダ内にあるconfig.ymlを設定する。
+4：AzipediaSearcherフォルダ内にあるconfig.ymlを設定する。
 
 5：`/wiki reload`でConfigを再読み込みするか、サーバーを再起動する。
 
@@ -31,6 +34,9 @@ MediaWiki内のページをマインクラフト内から検索するプラグ�
 ・type=orでどちらかが当てはまる場合の検索結果を表示します(デフォルトではtype=and)
 
 ・limit=titleでタイトルのみを検索します(デフォルトではtype=text)
+
+![スクリーンショット 2025-02-11 155403](https://github.com/user-attachments/assets/5aee984e-b91a-4bd4-875e-3757a7a48b68)
+
 
 エイリアス: `/azipedia`,`azisabawiki`,`w`
 
