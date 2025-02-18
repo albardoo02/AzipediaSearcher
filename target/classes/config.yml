@@ -1,4 +1,6 @@
 # AzipediaSearcher YamlConfiguration
+# Config Version
+configVersion: 1.0
 # Plugin Version
 version: 1.0
 
@@ -9,8 +11,20 @@ language: "ja"
 # 検索するMediaWikiのURLを設定してください
 # /api.phpとなるようにしてください
 # 例：http://ja.wikipedia.org/w/api.php
-# 　　この場合、.../w/までを設定してください
+# この場合、.../w/までを設定してください
 BaseUrl: "https://wiki.azisaba.net/"
 
 # /wiki searchコマンドのクールダウンを設定します
 cooldown: 10
+
+# 通常検索時の最大取得件数
+NormalSearchLimit: 50
+
+# カテゴリ検索の最大取得件数
+CategorySearchLimit: 50
+
+#カテゴリ一覧
+Category:
+  - 'Life'
+  - 'LGW'
+  - 'LGW2'

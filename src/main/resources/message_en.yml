@@ -60,3 +60,5 @@ Help:
 WikiUrl:
   - '&bClick here for the official Wiki!'
   - '&f&n&lhttps://wiki.azisaba.net/'
+ConfigCommandHelp:
+  - '/wiki config reload'

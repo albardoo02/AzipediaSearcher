@@ -89,16 +89,20 @@ public class WikiCommandExecutor implements CommandExecutor {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                     messageManager.getMessage("Searching")));
 
-            String type = "and";
-            String limit = "text";
+            String SearchType = "AND";
+            String SearchRange = "Content";
 
             List<String> queryWords = new ArrayList<>();
+            String Category = "";
             for (int i = 1; i < args.length; i++) {
                 String arg = args[i];
-                if (arg.startsWith("type=")) {
-                    type = arg.replace("type=","").toLowerCase();
-                } else if (arg.startsWith("limit=")) {
-                    limit = arg.replace("limit=","").toLowerCase();
+                if (arg.startsWith("Category=")) {
+                    Category = arg.replace("Category=","");
+                }
+                else if (arg.startsWith("SearchType=")) {
+                    SearchType = arg.replace("SearchType=","").toLowerCase();
+                } else if (arg.startsWith("SearchRange=")) {
+                    SearchRange = arg.replace("SearchRange=","").toLowerCase();
                 } else {
                     queryWords.add(arg);
                 }
@@ -106,7 +110,7 @@ public class WikiCommandExecutor implements CommandExecutor {
 
             String query = String.join(" ",queryWords);
 
-            JSONArray items = searchWiki(query, type, limit);
+            JSONArray items = searchWiki(query, Category, SearchType, SearchRange);
             if (items == null || items.isEmpty()) {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                         messageManager.getMessage("SearchNotFound").replace("%search",query)));
@@ -146,17 +150,23 @@ public class WikiCommandExecutor implements CommandExecutor {
             return true;
         }
 
-        if (subCommand.equalsIgnoreCase("reload") || subCommand.equalsIgnoreCase("r")) {
-            if (!sender.hasPermission("azipediasearcher.command.reload")) {
+        if (subCommand.equalsIgnoreCase("config") || subCommand.equalsIgnoreCase("c")) {
+            List<String> configMessages = messageManager.getMessageList("ConfigCommandHelp");
+            for (String msg : configMessages) {
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&',msg));
+            }
+            if (args[1].equalsIgnoreCase("reload")) {
+                if (!sender.hasPermission("azipediasearcher.command.reload")) {
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                            messageManager.getMessage("NoPermission")));
+                    return true;
+                }
+                plugin.reloadConfig();
+                messageManager.loadMessages();
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                        messageManager.getMessage("NoPermission")));
+                        messageManager.getMessage("ReloadConfig")));
                 return true;
             }
-            plugin.reloadConfig();
-            messageManager.loadMessages();
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                    messageManager.getMessage("ReloadConfig")));
-            return true;
         }
 
         List<String> unknownMessages = messageManager.getMessageList("UnknownCommand");
@@ -166,34 +176,108 @@ public class WikiCommandExecutor implements CommandExecutor {
         return true;
     }
 
-    private JSONArray searchWiki(String query, String type, String limit) {
+    private JSONArray searchWiki(String query, String Category, String SearchType, String SearchRange) {
         try {
             String baseUrl = plugin.getConfig().getString("BaseUrl");
             String encodedQuery;
-            if (type.equalsIgnoreCase("or")) {
+            int CategorySearchLimit = plugin.getConfig().getInt("CategorySearchLimit",20);
+
+            if (SearchType.equalsIgnoreCase("OR")) {
                 encodedQuery = URLEncoder.encode(query.replace(" ","|"), StandardCharsets.UTF_8);
             } else {
                 encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
             }
 
-            String srwhat = limit.equalsIgnoreCase("title") ? "&srwhat=title" : "&srwhat=text";
+            if(!Category.isEmpty()) {
+                String categoryUrl = baseUrl + "api.php?action=query&list=categorymembers&cmtitle=Category:"
+                        + URLEncoder.encode(Category, StandardCharsets.UTF_8)
+                        + "&cmlimit=" + CategorySearchLimit +  "&format=json";
 
-            String  urlString = baseUrl + "api.php?action=query&list=search&srsearch=" + encodedQuery + srwhat + "&format=json";
+                URL url = new URL(categoryUrl);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
 
-            URL url = new URL(urlString);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+                reader.close();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            StringBuilder response = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                response.append(line);
+                JSONObject json = new JSONObject(response.toString());
+                JSONArray categoryMembers = json.getJSONObject("query").getJSONArray("categorymembers");
+
+                JSONArray resultItems = new JSONArray();
+                for (int i = 0; i < categoryMembers.length(); i++) {
+                    String title = categoryMembers.getJSONObject(i).getString("title");
+
+                    String contentUrl = baseUrl + "api.php?action=query&prop=extracts&titles="
+                            + URLEncoder.encode(title, StandardCharsets.UTF_8)
+                            + "&explaintext=true&format=json";
+
+                    URL contentRequestUrl = new URL(contentUrl);
+                    HttpURLConnection contentConnection = (HttpURLConnection) contentRequestUrl.openConnection();
+                    contentConnection.setRequestMethod("GET");
+
+                    BufferedReader contentReader = new BufferedReader(new InputStreamReader(contentConnection.getInputStream()));
+                    StringBuilder contentResponse = new StringBuilder();
+                    String contentLine;
+                    while ((contentLine = contentReader.readLine()) != null) {
+                        contentResponse.append(contentLine);
+                    }
+                    contentReader.close();
+
+                    JSONObject contentJson = new JSONObject(contentResponse.toString());
+                    JSONObject pages = contentJson.getJSONObject("query").getJSONObject("pages");
+                    for (String key : pages.keySet()) {
+                        JSONObject page = pages.getJSONObject(key);
+                        String pageContent = page.getString("extract");
+
+                        if (SearchType.equalsIgnoreCase("OR")) {
+                            String[] keywords = query.split(" ");
+                            for (String keyword : keywords) {
+                                resultItems.put(page);
+                                break;
+                            }
+                        } else {
+                            boolean allMatch = true;
+                            String[] keywords = query.split(" ");
+                            for (String keyword : keywords) {
+                                if (!pageContent.contains(keyword)) {
+                                    allMatch = false;
+                                    break;
+                                }
+                            }
+                            if (allMatch) {
+                                resultItems.put(page);
+                            }
+                        }
+                    }
+                }
+                return resultItems;
+            } else {
+                String srwhat = SearchRange.equalsIgnoreCase("title") ? "&srwhat=title" : "&srwhat=text";
+                int NormalSearchLimit = plugin.getConfig().getInt("NormalSearchLimit", 20);
+
+                String urlString = baseUrl + "api.php?action=query&list=search&srsearch=" + encodedQuery
+                        + srwhat + "&srlimit" + NormalSearchLimit + "&format=json";
+
+                URL url = new URL(urlString);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+                reader.close();
+
+                JSONObject json = new JSONObject(response.toString());
+                return json.getJSONObject("query").getJSONArray("search");
             }
-            reader.close();
-
-            JSONObject json = new JSONObject(response.toString());
-            return json.getJSONObject("query").getJSONArray("search");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -229,6 +313,7 @@ public class WikiCommandExecutor implements CommandExecutor {
     }
 
     private void showSearchResults(Player player, JSONArray items, int page, String query) {
+        String baseUrl = plugin.getConfig().getString("BaseUrl");
         int totalResults = items.length();
         int totalPages = (int) Math.ceil(totalResults / 5.0);
         int start = (page - 1) * 5;
@@ -241,7 +326,7 @@ public class WikiCommandExecutor implements CommandExecutor {
         for (int i = start; i < end; i++) {
             JSONObject item = items.getJSONObject(i);
             String title = item.getString("title");
-            String link = "https://wiki.azisaba.net/wiki/" + title.replace(" ","_");
+            String link = baseUrl + title.replace(" ","_");
 
             TextComponent message = new TextComponent(ChatColor.GRAY + "[" + (i + 1) + "] " + ChatColor.WHITE + title);
             message.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, link));

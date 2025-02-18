@@ -16,3 +16,15 @@ BaseUrl: "https://wiki.azisaba.net/"
 
 # /wiki searchコマンドのクールダウンを設定します
 cooldown: 10
+
+# 通常検索時の最大取得件数
+NormalSearchLimit: 50
+
+# カテゴリ検索の最大取得件数
+CategorySearchLimit: 50
+
+#カテゴリ一覧
+Category:
+  - 'Life'
+  - 'LGW'
+  - 'LGW2'

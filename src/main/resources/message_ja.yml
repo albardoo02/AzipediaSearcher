@@ -9,12 +9,12 @@ NoPermission: "&cあなたには権限がありません"
 # リロードが完了したことを表示します
 ReloadConfig: "&aConfigを再読み込みしました"
 # Wiki内を検索中であることを表示します
-Searching: "検索しています..."
+Searching: "&7検索しています..."
 # 検索結果が見つからなかったときに表示するメッセージ
 SearchNotFound: "検索結果がありませんでした"
 # クールダウン中であるときに表示するメッセージが
 # %timeで残りの秒数を表示できます
-CooldownMessage: "&cクールダウン中です。あと&%time秒お待ち下さい"
+CooldownMessage: "&cクールダウン中です。あと%time&c秒お待ち下さい"
 # 検索結果が見つかったときに表示するメッセージ
 # %searchで検索した単語、%totalResultsで検索結果件数を表示できます
 SearchResult: "&a%searchについての検索結果: &d%totalResults&a件見つかりました"
@@ -60,3 +60,6 @@ Help:
 WikiUrl:
   - '&b公式Wikiはこちら！'
   - '&f&n&lhttps://wiki.azisaba.net/'
+
+ConfigCommandHelp:
+  - '/wiki config reload'
