@@ -18,6 +18,9 @@ MediaWiki内のページをマインクラフト内から検索するプラグ�
 
 5：`/wiki reload`でConfigを再読み込みするか、サーバーを再起動する。
 
+※Minecraft Ver 1.18.2でのみ動作確認しています。
+　それ以外のバージョンについては不明です。
+
 ## コマンド
 ### 全般
 ・`/wiki help`: AzipediaSearcherのヘルプ
